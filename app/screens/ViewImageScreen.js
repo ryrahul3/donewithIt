@@ -1,23 +1,24 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View,Dimensions } from 'react-native';
 import { Video } from 'expo-av';
 
 import colors from "../config/color";
 
+const { width, height} = Dimensions.get('window');
+
 const ViewImageScreen = () => {
   return (
     <View style={styles.container}>
-      {/* <View style={styles.closeIcon}></View>
-      <View style={styles.deleteIcon}></View> */}
       <Video
         style={styles.video}
         source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
         rate={1.0}
         volume={1.0}
         isMuted={false}
-        resizeMode='cover'
-        shouldPlay
-        isLooping
+        resizeMode='contain'
+        shouldPlay={true}
+        isLooping={false}
+        useNativeControls
       />
       {/* <Image resizeMode='contain' style={styles.image} source={require('../assets/chair.jpg')} /> */}
     </View>
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.black,
     flex: 1,
+    alignItems:'center'
   },
   closeIcon: {
     width: 50,
@@ -46,12 +48,12 @@ const styles = StyleSheet.create({
     right: 30,
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: width,
+    height: height,
   },
   video: {
-    width: '100%',
-    height: '100%',
+    width: width,
+    height: height,
   },
 });
 export default ViewImageScreen;

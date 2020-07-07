@@ -13,10 +13,13 @@ function WelcomeScreen({navigation}) {
       <TouchableWithoutFeedback onPress={() => navigation.navigate('Video Player')}>
         <View style={styles.loginButton}>
           <Text style={styles.loginText}>Video Player</Text>
-          {/* <Button title='Press me' color={colors.primary} onPress={() => navigation.navigate('Image')}></Button> */}
         </View>
       </TouchableWithoutFeedback>
-      {/* <View style={styles.registerButton}></View> */}
+      <TouchableWithoutFeedback onPress={() => navigation.navigate('Camera')}>
+        <View style={styles.registerButton}>
+          <Text style={styles.loginText}>Camera</Text>
+        </View>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   );
 }
