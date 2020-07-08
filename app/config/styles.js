@@ -9,6 +9,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   preview: {
+    flex:1,
     height: winHeight,
     width: winWidth,
     position: 'absolute',

@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableWithoutFeedback, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import { Audio } from 'expo-av';
+import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Ionicons } from '@expo/vector-icons';
 
-function CameraScreen(props) {
+import styles from '../config/styles';
+import Gallery from '../shared/gallery.component';
+
+function CameraScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [recording, setRecording] = useState(false);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
+  const [captures, setCapture] = useState([]);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
     (async () => {
@@ -30,111 +36,73 @@ function CameraScreen(props) {
   }
   return (
     <View style={{ flex: 1 }}>
-      <Camera
-        style={{ flex: 1 }}
-        type={type}
-        ref={(ref) => {
-          setCameraRef(ref);
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'transparent',
-            justifyContent: 'flex-end',
+      <View style={{ flex: 1 }}>
+        <Camera
+          type={cameraType}
+          flashMode={flashMode}
+          style={styles.preview}
+          zoom={0}
+          ref={(ref) => {
+            setCameraRef(ref);
           }}
-        >
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-            }}
-          >
+        />
+      </View>
+
+      {captures.length > 0 && (
+        <ScrollView horizontal={true} style={[styles.bottomToolbar, styles.galleryContainer]}>
+          {captures.map(({ uri }) => (
+            // <TouchableWithoutFeedback onPress={() => navigation.navigate('Video Player',{uri : uri})}>
+            <View style={styles.galleryImageContainer} key={uri}>
+              <TouchableWithoutFeedback onPress={() => navigation.navigate('Video Player', { uri: uri })}>
+                <Image source={{ uri }} style={styles.galleryImage} />
+              </TouchableWithoutFeedback>
+            </View>
+          ))}
+        </ScrollView>
+      )}
+
+      <Grid style={styles.bottomToolbar}>
+        <Row>
+          <Col style={styles.alignCenter}>
             <TouchableOpacity
-              style={{
-                flex: 0.1,
-                alignSelf: 'flex-end',
-              }}
-              onPress={() => {
-                setType(type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back);
-              }}
+              onPress={() =>
+                setFlashMode(flashMode === Camera.Constants.FlashMode.on ? Camera.Constants.FlashMode.off : Camera.Constants.FlashMode.on)
+              }
             >
-              <Ionicons name={Platform.OS === 'ios' ? 'ios-reverse-camera' : 'md-reverse-camera'} size={25} color='white' />
+              <Ionicons name={flashMode == Camera.Constants.FlashMode.on ? 'md-flash' : 'md-flash-off'} color='white' size={30} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{ alignSelf: 'center' }}
+          </Col>
+          <Col size={2} style={styles.alignCenter}>
+            <TouchableWithoutFeedback
+              onPressIn={() => {
+                setRecording(true);
+              }}
+              onPressOut={() => {
+                if (recording) cameraRef.stopRecording();
+              }}
+              onLongPress={async () => {
+                const videoData = await cameraRef.recordAsync();
+                setRecording(false);
+                setCapture([videoData, ...captures]);
+              }}
               onPress={async () => {
-                if (cameraRef) {
-                  let photo = await cameraRef.takePictureAsync();
-                  console.log('photo', photo);
-                }
+                const photoData = await cameraRef.takePictureAsync();
+                setRecording(false);
+                setCapture([photoData, ...captures]);
               }}
             >
-              <View
-                style={{
-                  borderWidth: 2,
-                  borderRadius: 50,
-                  borderColor: 'white',
-                  height: 50,
-                  width: 50,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <View
-                  style={{
-                    borderWidth: 2,
-                    borderRadius: 50,
-                    borderColor: 'white',
-                    height: 40,
-                    width: 40,
-                    backgroundColor: 'white',
-                  }}
-                ></View>
-              </View>
-            </TouchableOpacity>
+              <View style={[styles.captureBtn, recording && styles.captureBtnActive]}>{recording && <View style={styles.captureBtnInternal} />}</View>
+            </TouchableWithoutFeedback>
+          </Col>
+          <Col style={styles.alignCenter}>
             <TouchableOpacity
-              style={{ alignSelf: 'center' }}
-              onPress={async () => {
-                if (!recording) {
-                  setRecording(true);
-                  let video = await cameraRef.recordAsync();
-                  console.log('video', video);
-                } else {
-                  setRecording(false);
-                  cameraRef.stopRecording();
-                }
-              }}
+              onPress={() => setCameraType(cameraType === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back)}
             >
-              <View
-                style={{
-                  borderWidth: 2,
-                  borderRadius: 50,
-                  borderColor: 'red',
-                  height: 50,
-                  width: 50,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <View
-                  style={{
-                    borderWidth: 2,
-                    borderRadius: 50,
-                    borderColor: 'red',
-                    height: 40,
-                    width: 40,
-                    backgroundColor: 'red',
-                  }}
-                ></View>
-              </View>
+              <Ionicons name='md-reverse-camera' color='white' size={30} />
             </TouchableOpacity>
-          </View>
-        </View>
-      </Camera>
+          </Col>
+        </Row>
+      </Grid>
     </View>
   );
 }

@@ -10,11 +10,11 @@ function WelcomeScreen({navigation}) {
         <Image style={styles.logo} source={require('../assets/logo-red.png')} />
         <Text>Sell What you don't need</Text>
       </View>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('Video Player')}>
+      {/* <TouchableWithoutFeedback onPress={() => navigation.navigate('Video Player')}>
         <View style={styles.loginButton}>
           <Text style={styles.loginText}>Video Player</Text>
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback> */}
       <TouchableWithoutFeedback onPress={() => navigation.navigate('Camera')}>
         <View style={styles.registerButton}>
           <Text style={styles.loginText}>Camera</Text>
