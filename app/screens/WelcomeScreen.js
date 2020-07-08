@@ -1,21 +1,33 @@
-import React from 'react';
-import { ImageBackground, StyleSheet, View, Image, Text, Button,TouchableWithoutFeedback } from 'react-native';
-import colors from '../config/color';
+import React from "react";
+import {
+  ImageBackground,
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  Button,
+  TouchableWithoutFeedback,
+} from "react-native";
+import colors from "../config/color";
 
-
-function WelcomeScreen({navigation}) {
+function WelcomeScreen({ navigation }) {
   return (
-    <ImageBackground style={styles.background} source={require('../assets/background.jpg')}>
+    <ImageBackground
+      style={styles.background}
+      source={require("../assets/background.jpg")}
+    >
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={require('../assets/logo-red.png')} />
+        <Image style={styles.logo} source={require("../assets/logo-red.png")} />
         <Text>Sell What you don't need</Text>
       </View>
-      {/* <TouchableWithoutFeedback onPress={() => navigation.navigate('Video Player')}>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate("Video List")}
+      >
         <View style={styles.loginButton}>
-          <Text style={styles.loginText}>Video Player</Text>
+          <Text style={styles.loginText}>Video List</Text>
         </View>
-      </TouchableWithoutFeedback> */}
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('Camera')}>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate("Camera")}>
         <View style={styles.registerButton}>
           <Text style={styles.loginText}>Camera</Text>
         </View>
@@ -27,17 +39,17 @@ function WelcomeScreen({navigation}) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   loginButton: {
-    width: '100%',
+    width: "100%",
     height: 70,
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: colors.primary,
   },
   registerButton: {
-    width: '100%',
+    width: "100%",
     height: 70,
     backgroundColor: colors.secondary,
   },
@@ -46,14 +58,14 @@ const styles = StyleSheet.create({
     height: 100,
   },
   logoContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 70,
-    alignItems: 'center',
+    alignItems: "center",
   },
   loginText: {
-    color: '#fff',
-    top:20,
-    alignSelf: 'center',
+    color: "#fff",
+    top: 20,
+    alignSelf: "center",
   },
 });
 

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, View, Dimensions } from 'react-native';
-import { Video } from 'expo-av';
+import React, { useState } from "react";
+import { Image, StyleSheet, View, Dimensions } from "react-native";
+import { Video } from "expo-av";
 
-import colors from '../config/color';
+import colors from "../config/color";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 function ViewImageScreen({ route }) {
   const { uri } = route.params;
-  if (uri.toString().endsWith('.mp4')) {
+  if (uri.toString().endsWith(".mp4")) {
     return (
       <View style={styles.container}>
         <Video
@@ -17,7 +17,7 @@ function ViewImageScreen({ route }) {
           rate={1.0}
           volume={5.0}
           isMuted={false}
-          resizeMode='contain'
+          resizeMode="contain"
           shouldPlay={true}
           isLooping={false}
           useNativeControls
@@ -28,7 +28,7 @@ function ViewImageScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      <Image resizeMode='contain' style={styles.image} source={{ uri: uri }} />
+      <Image resizeMode="contain" style={styles.image} source={{ uri: uri }} />
     </View>
   );
 }
@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.black,
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   closeIcon: {
     width: 50,
     height: 50,
     backgroundColor: colors.primary,
-    position: 'absolute',
+    position: "absolute",
     top: 40,
     left: 30,
   },
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     backgroundColor: colors.secondary,
-    position: 'absolute',
+    position: "absolute",
     top: 40,
     right: 30,
   },
