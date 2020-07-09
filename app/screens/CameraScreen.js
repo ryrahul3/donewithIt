@@ -19,6 +19,7 @@ function CameraScreen({ navigation }) {
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
+     // console.log(Camera.getSupportedRatiosAsync());
       if (status == 'granted') {
         let audioResponse = await Audio.requestPermissionsAsync();
         if (audioResponse.status == 'granted') {
@@ -41,25 +42,15 @@ function CameraScreen({ navigation }) {
           type={cameraType}
           flashMode={flashMode}
           style={styles.preview}
-          zoom={0}
+          useCamera2Api
+          ratio='4:3'
           ref={(ref) => {
             setCameraRef(ref);
           }}
         />
       </View>
 
-      {captures.length > 0 && (
-        <ScrollView horizontal={true} style={[styles.bottomToolbar, styles.galleryContainer]}>
-          {captures.map(({ uri }) => (
-            // <TouchableWithoutFeedback onPress={() => navigation.navigate('Video Player',{uri : uri})}>
-            <View style={styles.galleryImageContainer} key={uri}>
-              <TouchableWithoutFeedback onPress={() => navigation.navigate('Video Player', { uri: uri })}>
-                <Image source={{ uri }} style={styles.galleryImage} />
-              </TouchableWithoutFeedback>
-            </View>
-          ))}
-        </ScrollView>
-      )}
+      {captures.length > 0 && <Gallery captures={captures} navigation={navigation} />}
 
       <Grid style={styles.bottomToolbar}>
         <Row>
@@ -75,6 +66,7 @@ function CameraScreen({ navigation }) {
           <Col size={2} style={styles.alignCenter}>
             <TouchableWithoutFeedback
               onPressIn={() => {
+                
                 setRecording(true);
               }}
               onPressOut={() => {
@@ -86,6 +78,7 @@ function CameraScreen({ navigation }) {
                 setCapture([videoData, ...captures]);
               }}
               onPress={async () => {
+               await cameraRef.getSupportedRatiosAsync().then((data) => console.log(data));
                 const photoData = await cameraRef.takePictureAsync();
                 setRecording(false);
                 setCapture([photoData, ...captures]);
