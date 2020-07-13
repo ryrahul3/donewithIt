@@ -36,14 +36,14 @@ function ViewVideoListScreen({ uri, navigation }) {
           on
         />
       </TouchableWithoutFeedback>
-      <View style={customStyle.bottomToolbar}>
+      {/* <View style={customStyle.bottomToolbar}>
         <Ionicons
           style={customStyle.alignCenter}
           name="md-reverse-camera"
           color="white"
           size={30}
         />
-      </View>
+      </View> */}
     </View>
   );
 }
